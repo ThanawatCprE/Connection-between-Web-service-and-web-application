@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <script type ="text/javascript">
+            function soapify () {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.getAllResponseHeaders();
+                xmlhttp.open('POST','http://127.0.0.1:3036/getBMI',true);
+                 var input = '<?xml version="1.0"?>' +
+                 '<biodata>' +
+                    '<Weight>'+document.getElementById('weight').value+'</Weight>'+
+                    '<Height>'+document.getElementById('height').value +'</Height>' +
+                 '</biodata>';
+                xmlhttp.onreadystatechange = function() {
+                    if(xmlhttp.readyState == 4)
+                    {
+                        if(xmlhttp.status == 200){
+                            console.log("Data pushed\n");
+                            result = JSON.parse(xmlhttp.responseText);
+                            document.getElementById("result").innerHTML = '<p><b>Your BMI is '+result.echoResult.float[0]+'</b></p>'
+                            document.getElementById("result").innerHTML += "<div>"
+                            document.getElementById("result").innerHTML += '<img src="http://bodikbodymake-th.com/wp-content/uploads/2016/12/BMI-TH5.jpg" style="width:980px;height:418px;">'
+                            document.getElementById("result").innerHTML += "</div>"
+                        }
+                    }
+                }
+                xmlhttp.setRequestHeader('Content-Type','text/xml');
+                xmlhttp.send(input);
+            }
+        </script>
+    </head>
+    <body>
+    <h1>Calculate Your BMI: Body Mass Index</h1>
+        <form>
+            Weight(kg.): <input type="text" name ="weight" id = "weight"><br><br>
+            Height(cm.): <input type="text" name = "height" id = "height"><br><br>
+            <input type = "button" value = "Calculate" onclick = "soapify()"/><br>
+            <div id="result" ></div>
+        </form>
+    </body>
+</html>
